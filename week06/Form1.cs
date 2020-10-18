@@ -21,6 +21,13 @@ namespace week06
         public Form1()
         {
             InitializeComponent();
+            RefreshData();
+        }
+
+
+        void RefreshData()
+        {
+            Rates.Clear();
             dataGridView1.DataSource = Rates;
             var mnbService = new MNBArfolyamServiceSoapClient();
 
@@ -31,34 +38,61 @@ namespace week06
                 endDate = "2020-06-30"
             };
 
-            // Ebben az esetben a "var" a GetExchangeRates visszatérési értékéből kapja a típusát.
-            // Ezért a response változó valójában GetExchangeRatesResponseBody típusú.
+
             var response = mnbService.GetExchangeRates(request);
 
-            // Ebben az esetben a "var" a GetExchangeRatesResult property alapján kapja a típusát.
-            // Ezért a result változó valójában string típusú.
             var result = response.GetExchangeRatesResult;
 
-            // XML document létrehozása és az aktuális XML szöveg betöltése
             var xml = new XmlDocument();
             xml.LoadXml(result);
 
-            // Végigmegünk a dokumentum fő elemének gyermekein
             foreach (XmlElement element in xml.DocumentElement)
             {
-                // Létrehozzuk az adatsort és rögtön hozzáadjuk a listához
-                // Mivel ez egy referencia típusú változó, megtehetjük, hogy előbb adjuk a listához és csak később töltjük fel a tulajdonságait
+                var rate = new RateData();
+                Rates.Add(rate);
+                rate.Date = DateTime.Parse(element.GetAttribute("date"));
+                var childElement = (XmlElement)element.ChildNodes[0];
+                rate.Currency = childElement.GetAttribute("curr");
+                var unit = decimal.Parse(childElement.GetAttribute("unit"));
+                var value = decimal.Parse(childElement.InnerText);
+                if (unit != 0)
+                    rate.Value = value / unit;
+            }
+        }
+
+
+        /*void RefreshData()
+        {
+            Rates.Clear();
+            dataGridView1.DataSource = Rates;
+            var mnbService = new MNBArfolyamServiceSoapClient();
+
+            var request = new GetExchangeRatesRequestBody()
+            {
+                currencyNames = "EUR",
+                startDate = "2020-01-01",
+                endDate = "2020-06-30"
+            };
+
+
+            var response = mnbService.GetExchangeRates(request);
+
+            var result = response.GetExchangeRatesResult;
+
+            var xml = new XmlDocument();
+            xml.LoadXml(result);
+
+            foreach (XmlElement element in xml.DocumentElement)
+            {
+
                 var rate = new RateData();
                 Rates.Add(rate);
 
-                // Dátum
                 rate.Date = DateTime.Parse(element.GetAttribute("date"));
 
-                // Valuta
                 var childElement = (XmlElement)element.ChildNodes[0];
                 rate.Currency = childElement.GetAttribute("curr");
 
-                // Érték
                 var unit = decimal.Parse(childElement.GetAttribute("unit"));
                 var value = decimal.Parse(childElement.InnerText);
                 if (unit != 0)
@@ -82,6 +116,21 @@ namespace week06
             }
 
 
+        }*/
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshData();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshData();
         }
     }
 }
