@@ -17,13 +17,23 @@ namespace week06
     public partial class Form1 : Form
     {
         RateData context = new RateData();
-        List<RateData> Rates = new List<RateData>();
+        BindingList<RateData> Rates = new BindingList<RateData>();
+        BindingList<RateData> Currencies = new BindingList<RateData>();
         public Form1()
         {
             InitializeComponent();
+            //GetCurrencies();
             RefreshData();
+            
         }
 
+
+        /*void GetCurrencies()
+        {
+            comboBox1.DataSource = Currencies;
+            var mnbService = new MNBArfolyamServiceSoapClient();
+             
+        }*/
 
         void RefreshData()
         {
@@ -33,9 +43,9 @@ namespace week06
 
             var request = new GetExchangeRatesRequestBody()
             {
-                currencyNames = "EUR",
-                startDate = "2020-01-01",
-                endDate = "2020-06-30"
+                currencyNames = comboBox1.SelectedItem.ToString(),
+                startDate = (dateTimePicker1.Value).ToString(),
+                endDate = (dateTimePicker2.Value).ToString()
             };
 
 
@@ -57,47 +67,6 @@ namespace week06
                 var value = decimal.Parse(childElement.InnerText);
                 if (unit != 0)
                     rate.Value = value / unit;
-            }
-        }
-
-
-        /*void RefreshData()
-        {
-            Rates.Clear();
-            dataGridView1.DataSource = Rates;
-            var mnbService = new MNBArfolyamServiceSoapClient();
-
-            var request = new GetExchangeRatesRequestBody()
-            {
-                currencyNames = "EUR",
-                startDate = "2020-01-01",
-                endDate = "2020-06-30"
-            };
-
-
-            var response = mnbService.GetExchangeRates(request);
-
-            var result = response.GetExchangeRatesResult;
-
-            var xml = new XmlDocument();
-            xml.LoadXml(result);
-
-            foreach (XmlElement element in xml.DocumentElement)
-            {
-
-                var rate = new RateData();
-                Rates.Add(rate);
-
-                rate.Date = DateTime.Parse(element.GetAttribute("date"));
-
-                var childElement = (XmlElement)element.ChildNodes[0];
-                rate.Currency = childElement.GetAttribute("curr");
-
-                var unit = decimal.Parse(childElement.GetAttribute("unit"));
-                var value = decimal.Parse(childElement.InnerText);
-                if (unit != 0)
-                    rate.Value = value / unit;
-
                 chartRateData.DataSource = Rates;
 
                 var series = chartRateData.Series[0];
@@ -114,9 +83,7 @@ namespace week06
                 chartArea.AxisY.MajorGrid.Enabled = false;
                 chartArea.AxisY.IsStartedFromZero = false;
             }
-
-
-        }*/
+        }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
