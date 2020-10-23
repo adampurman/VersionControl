@@ -21,12 +21,13 @@ namespace week07
         public Form1()
         {
             InitializeComponent();
-            Population = GetPopulation(@"C:\Windows\Temp\nép.csv");
+            Population = GetPopulation(@"C:\Windows\Temp\nép-teszt.csv");
             BirthProbabilities = GetBirthProbabilities(@"C:\Windows\Temp\születés.csv");
             DeathProbabilities = GetDeathProbabilities(@"C:\Windows\Temp\halál.csv");
+            csvpathtxt.Text = "C:\\Windows\\Temp\\nép-teszt.csv";
 
 
-            
+
         }
 
         private void Simulation(int zaroev)
