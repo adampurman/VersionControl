@@ -143,31 +143,6 @@ namespace week07
             return DeathProbs;
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            eredmenytxt.Text = "";
-            Simulation(int.Parse(zaroev.Value.ToString()) + 1);
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog choofdlog = new OpenFileDialog();
-            choofdlog.Filter = "All Files (*.*)|*.*";
-            choofdlog.FilterIndex = 1;
-            choofdlog.Multiselect = false;
-
-            if (choofdlog.ShowDialog() == DialogResult.OK)
-            {
-                string sFileName = choofdlog.FileName;
-                csvpathtxt.Text = choofdlog.FileName.ToString();
-
-            }
-            Population = GetPopulation(choofdlog.FileName);
-
-
-
-        }
-
         private void SimStep(int year, Person person)
         {
             Random rng = new Random(1234);
@@ -203,6 +178,28 @@ namespace week07
                     Population.Add(újszülött);
                 }
             }
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            OpenFileDialog choofdlog = new OpenFileDialog();
+            choofdlog.Filter = "All Files (*.*)|*.*";
+            choofdlog.FilterIndex = 1;
+            choofdlog.Multiselect = false;
+
+            if (choofdlog.ShowDialog() == DialogResult.OK)
+            {
+                string sFileName = choofdlog.FileName;
+                csvpathtxt.Text = choofdlog.FileName.ToString();
+
+            }
+            Population = GetPopulation(choofdlog.FileName);
+        }
+
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            eredmenytxt.Text = "";
+            Simulation(int.Parse(zaroev.Value.ToString()) + 1);
         }
     }
 }
