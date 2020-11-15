@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using week08.Abstractions;
 using week08.Entities;
 
 namespace week08
@@ -16,17 +17,24 @@ namespace week08
     {
         private List<Toy> _toys = new List<Toy>();
 
-        private BallFactory _factory;
-        public BallFactory Factory
+        private Toy _nextToy;
+        private IToyFactory _factory;
+        public IToyFactory Factory
         {
             get { return _factory; }
-            set { _factory = value; }
+            set
+            {
+                _factory = value;
+                DisplayNext();
+            }
         }
+
         public Form1()
         {
             InitializeComponent();
             Factory = new BallFactory();
         }
+
         private void createTimer_Tick(object sender, EventArgs e)
         {
             var ball = Factory.CreateNew();
@@ -40,7 +48,7 @@ namespace week08
             var maxPosition = 0;
             foreach (var ball in _toys)
             {
-                ball.MoveBall();
+                ball.MoveToy();
                 if (ball.Left > maxPosition)
                     maxPosition = ball.Left;
             }

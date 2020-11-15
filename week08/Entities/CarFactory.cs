@@ -9,7 +9,7 @@ namespace week08.Entities
 {
     public class CarFactory : IToyFactory
     {
-        public Car CreateNew()
+        public Toy CreateNew()
         {
             return new Car();
         }
