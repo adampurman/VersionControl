@@ -68,7 +68,7 @@ namespace week09
             label1.Text = string.Format(
                 "{0}. generáció",
                 generation);
-            var winners = from p in topPerformers
+            /*var winners = from p in topPerformers
                           where p.IsWinner
                           select p;
             if (winners.Count() > 0)
@@ -76,7 +76,7 @@ namespace week09
                 winnerBrain = winners.FirstOrDefault().Brain.Clone();
                 gc.GameOver -= Gc_GameOver;
                 return;
-            }
+            }*/
         }
 
     }
